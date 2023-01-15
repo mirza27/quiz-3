@@ -9,6 +9,8 @@ import (
 	"fmt"
 	//"net/http"
 	_ "github.com/lib/pq"
+	"github.com/joho/godotenv"
+	"os"
 )
 
 const (
@@ -28,8 +30,21 @@ var (
 func main() {
 	
 	// Database connection
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-	host, port, user, password, dbname)
+	err = godotenv.Load("config/.env")
+	if err != nil {
+		fmt.Println("failed to load config")
+	} else {
+		fmt.Println("success loaded config")
+	}
+
+	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+	os.Getenv("PGHOST"), 
+	os.Getenv("PGPORT"), 
+	os.Getenv("PGUSER"), 
+	os.Getenv("PGPASSWORD"), 
+	os.Getenv("PGDATABASE"))
+
+
 
 	DB, err = sql.Open("postgres", psqlInfo)
 	err = DB.Ping()
