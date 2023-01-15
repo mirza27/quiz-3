@@ -83,5 +83,5 @@ func main() {
 	router.DELETE("/books/:id", controllers.DeleteBook)
 
 
-	router.Run()
+	router.Run(":"+os.Getenv("PORT"))
 }
